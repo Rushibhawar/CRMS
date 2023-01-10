@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+*{
+	font-family: Syne;
+	word-wrap: break-word;  
+	scroll-behavior: smooth;
+}
+body {
+	background: rgb(238,174,202);
+	background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+	font-weight: 400;
+}
+h1,h2,h5{
+	font-weight: 700;
+}
+nav{
+	position: sticky;
+	box-shadow: 0 4px 6px rgba(0,0,0,0.19);
+	color: white !important;
+	border-radius: 10px;
+	position: sticky;
+	top: 10px;
+	z-index: 1;
+}
+.navbar {
+	display:flex;
+	flex-direction: column;
+}
+.navbar-nav{
+	display:flex;
+	flex-direction: column;	
+}
+.home-content{
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+.home-main-content {
+
+}
+.card-deck{
+	display:flex;
+	justify-content:center;
+}
+.card{
+/* 	background: rgb(238,174,202);
+	background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); */
+	box-shadow: 0 4px 6px rgba(0,0,0,0.19);
+	max-width: 300px;;
+}
+
+.card-text{
+	font-size: 50px;
+}
+/*tables*/
+.table{
+	border-radius: 10px;
+}
+.table-responsive,.table{
+	transform: rotateX(180deg);
+}
+/*applied jobs*/
+.applied-jobs-table{
+	border-radius: 10px;
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 	0px, rgba(14, 30, 37, 0.22) 0px 2px 16px 0px;
+}
+
+/*job opening*/
+.vacant-jobs-table{
+	border-radius: 10px;
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 	0px, rgba(14, 30, 37, 0.22) 0px 2px 16px 0px;
+}
