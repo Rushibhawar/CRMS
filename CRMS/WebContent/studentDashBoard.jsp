@@ -25,13 +25,13 @@
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
 		      <li class="nav-item ">
-		        <a class="nav-link " href="index.jsp">Home <span class="sr-only">(current)</span></a>
+		        <a class="nav-link " href="index.jsp">Home page<span class="sr-only">(current)</span></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link " href="index.jsp">About Us</a>
+		        <a class="nav-link " href="#appliedJobstable">Applied jobs</a>
 		      </li>
 			  <li class="nav-item">
-		        <a class="nav-link " href="index.jsp">Contact Us</a>
+		        <a class="nav-link " href="#jobopeningtable">Job openings</a>
 		      </li>
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -140,7 +140,7 @@
 						</div>
 					</div>
 					<div class="vacant-jobs-table mt-4 mb-4 text-center bg-light" id="jobopeningtable">
-						<h2 class=" pt-5" >Job  openings</h2>
+						<h2 class=" pt-5" >Job openings</h2>
 						<hr class="my-4">
 						<div class="table-responsive p-4">
 						  <table class="table">
