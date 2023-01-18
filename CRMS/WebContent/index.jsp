@@ -15,10 +15,15 @@
 </head>
 <body>
 	
-	<div>
+		
+		
 		<!-- navbar -->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark ml-3 mr-3" >
-		  <a class="navbar-brand" href="index.jsp">CRMS</a>
+		    <a class="navbar-brand" href="index.jsp">
+			  		<div class=" text-center text-info text-center ">
+						<img class="crms-logo " alt="crms logo" src="images/CRMS-1 (1).png" id="crms-logo" style="max-width: 100px;" >
+					</div>
+			  </a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -50,7 +55,7 @@
 		
 		<div class="home p-5">
 			<div class="home-content jumbotron " id="home">
-				<div class="home-main-content p-4 " >
+				<header class="home-main-content p-4 text-dark" >
 				  <h1 class="display-4">Campus Recruitment System</h1>
 				  <hr class="my-4">
 				  <div class="row">
@@ -68,7 +73,7 @@
 				  	</div>
 				  </div>
 				  
-				</div>
+				</header>
 				
 				<div class=" about-us bg-dark text-white text-center mt-4 mb-4 " id="about-us">
 					<div class="about-us-content">
@@ -158,15 +163,13 @@
 								</div>
 							</div>
 						</div>
+						<div class="copyright bg-info text-light p-2  text-center ">
+							Copyright &copy; 2023. All rights reserved.
+						</div>
 					</footer>
 				
 			</div>
 		</div>
-		
-		
-		
-	
-	</div>
 	
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>	

@@ -1,6 +1,10 @@
 <!-- navbar -->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark ml-3 mr-3" style="position: sticky;box-shadow: 0 4px 6px rgba(0,0,0,0.19);color: white !important;border-radius: 10px;position: sticky;top: 10px;z-index: 1;">
-		  <a class="navbar-brand" href="index.jsp">CRMS</a>
+		  <a class="navbar-brand" href="index.jsp">
+		  		<div class=" text-center text-info text-center ">
+					<img class="crms-logo " alt="crms logo" src="images/CRMS-1 (1).png" id="crms-logo" style="max-width: 100px;" >
+				</div>
+		  </a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>

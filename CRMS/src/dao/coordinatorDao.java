@@ -21,7 +21,7 @@ public class coordinatorDao {
 		int rs = 0;
 		try{
 			Connection con = ConnectionProvider.getMysqlConnection();
-			PreparedStatement ps = con.prepareStatement("insert into coordinator_table (coordinator_name,coordinator_email,coordinator_password,coordinator_address,coordinator_contact) values(?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into coordinator_table (coordinator_name,coordinator_email,coordinator_password,coordinator_address,coordinator_contact,deleted) values(?,?,?,?,?,0)");
 			ps.setString(1,coordinator.getCoordinatorName());
 			ps.setString(2,coordinator.getCoordinatorEmail());
 			ps.setString(3,coordinator.getCoordinatorPassword());
@@ -30,7 +30,7 @@ public class coordinatorDao {
 			rs=ps.executeUpdate(); 
 
 		}catch(Exception e){
-			System.out.println(e+"inside coordi insert servlet");
+			System.out.println(e+"inside insertCoordinator insert servlet");
 			e.printStackTrace();
 			
 		}
@@ -41,7 +41,7 @@ public class coordinatorDao {
 		Coordinator coordinator = null;
 		
 		try {
-			String query = "SELECT * FROM coordinator_table WHERE coordinator_email=?";
+			String query = "SELECT * FROM coordinator_table WHERE coordinator_email=? AND deleted=0";
 			
 			//prepare statement
 			PreparedStatement pstmt = con.prepareStatement(query);
@@ -65,7 +65,7 @@ public class coordinatorDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("User not found");
+			System.out.println("User not found getCoordinatorByEmailAndPassword");
 			e.printStackTrace();
 		}
 		
@@ -77,26 +77,41 @@ public class coordinatorDao {
 		ResultSet rs = null;
 		try {
 			Statement stmt = con.createStatement();
-			String query = "SELECT * FROM coordinator_table";
+			String query = "SELECT * FROM coordinator_table WHERE deleted=0";
 			rs = stmt.executeQuery(query);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("inside getcountrydetails function dao");
+			System.out.println("inside getAllCoordinatorDetails function dao");
 		}
 		
 		
 		return rs;
 	}
 	
-	
+	public ResultSet getAllDeletedCoordinatorDetails() {
+		ResultSet rs = null;
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM coordinator_table WHERE deleted=1";
+			rs = stmt.executeQuery(query);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside getAllCoordinatorDetails function dao");
+		}
+		
+		
+		return rs;
+	}
 	
 	public int deleteCoordinatorDetails(int coordinator_id){
 		int rs = 0;
 		
 		try {
-			String query = "DELETE FROM coordinator_table WHERE coordinator_id=?";
+			String query = "UPDATE coordinator_table SET deleted=1 WHERE coordinator_id=?";
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,coordinator_id);
 
@@ -104,10 +119,25 @@ public class coordinatorDao {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("inside dao delete coordinator details method");
+			System.out.println("inside dao delete coordinator details method deleteCoordinatorDetails");
 		}
+		return rs;
+	}
+	
+	public int restoreCoordinatorDetails(int coordinator_id){
+		int rs = 0;
 		
-		
+		try {
+			String query = "UPDATE coordinator_table SET deleted=0 WHERE coordinator_id=?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1,coordinator_id);
+
+			rs = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside dao delete coordinator details method deleteCoordinatorDetails");
+		}
 		return rs;
 	}
 
