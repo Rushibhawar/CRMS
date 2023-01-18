@@ -19,7 +19,11 @@
 		 
 		  <!-- navbar -->
 		<nav class="navbar navbar-expand-lg  navbar-dark bg-dark ml-3 mr-3" >
-		  <a class="navbar-brand" href="index.jsp">CRMS</a>
+		  <a class="navbar-brand" href="index.jsp">
+		  		<div class=" text-center text-info text-center ">
+					<img class="crms-logo " alt="crms logo" src="images/CRMS-1 (1).png" id="crms-logo" style="max-width: 100px;" >
+				</div>
+		  </a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -38,6 +42,8 @@
 		    </ul>
 		  </div>
 		</nav>
+		
+		
 		<!-- Establish connection -->
 		<%
 			Connection con = ConnectionProvider.getMysqlConnection();
@@ -46,8 +52,9 @@
 		
 		<!-- fetch current  coordinator id and name -->
 		<%
-			int coordinatorId =Integer.parseInt( request.getParameter("coordinatorId"));
-			String coordinatorName = request.getParameter("coordinatorName");
+			Coordinator coord = (Coordinator)session.getAttribute("currentUser");
+			int coordinatorId =coord.getCoordinatorId();
+			String coordinatorName = coord.getCoordinatorName();
 		%>
 		<!--Post Job Modal -->
 		<div class="modal fade" id="postJob" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelPostJob" aria-hidden="true">
@@ -97,7 +104,9 @@
 		<div class="home p-5">
 			<div class="home-content jumbotron " id="home">
 				<div class="home-main-content p-4  text-center" >
-					<h1 class="" >Coordinator Dashboard</h1>
+					<header>
+						<h1 class="text-dark" >Coordinator Dashboard</h1>
+					</header>
 					<hr class="my-4">
 					<div class="card-deck ">
 					  <div class="card text-white text-center bg-primary">
@@ -155,7 +164,55 @@
 						        <td><%=jobCompany %></td>
 						        <td><%=jobTitle %></td>
 						        <td><%=jobDescription %></td>
-						        <td><a href="DeleteJobServlet?jobId=<%=jobId %>"><button type="button" id="deleteJobServlet" class="btn btn-danger">Delete</button></a></td>
+						        <td>
+						        	<%-- <a href="DeleteJobServlet?jobId=<%=jobId %>"><button type="button"  id="deleteJobServlet" class="btn btn-danger" onclick="confirmDelete()">Delete</button></a> --%>
+						        	<button type="button"  id="deleteJobServlet" class="btn btn-danger" onclick="confirmJobPostedDelete('<%=jobId %>')">Delete</button>
+						        </td>
+						      </tr>
+						      <%
+								}
+						    %>
+						    </tbody>
+						  </table>
+						</div>
+					</div>
+					
+					<!-- table delete job posted -->
+					<div class="applied-jobs-table mt-5 mb-4 text-center bg-light" id="deleteJobsPosted">
+						<h2 class=" pt-5" >Deleted  Jobs </h2>
+						<hr class="my-4">
+						<div class="table-responsive p-4">
+						  <table class="table ">
+						    <thead class="bg-info text-white">
+						      <tr>
+						      	<th scope="col">Job ID</th>
+						      	<th scope="col">Posted By</th>
+						        <th scope="col">Company</th>
+						        <th scope="col">Position</th>
+						        <th scope="col">Job Description</th>
+						        <th scope="col">Restore Deleted Job</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+						     <%
+						    		rs = jobDao.getDeletedJobDetails(coordinatorId, coordinatorName);
+									while(rs.next())
+									{
+										int jobId = rs.getInt("job_id");
+										String coordinator_name = rs.getString("coordinator_name");
+										String jobCompany = rs.getString("job_company");
+										String jobTitle = rs.getString("job_title");
+										String jobDescription = rs.getString("job_description");
+										System.out.println(jobCompany+""+jobTitle);
+							  %>
+						      <tr class="table-info"	>
+						      	<td><%=jobId %></td>
+						      	<td><%=coordinator_name %></td>
+						        <td><%=jobCompany %></td>
+						        <td><%=jobTitle %></td>
+						        <td><%=jobDescription %></td>
+						        <%-- <a href="DeleteJobServlet?jobId=<%=jobId %>"><button type="button"  id="deleteJobServlet" class="btn btn-danger" onclick="confirmDelete()">Delete</button></a> --%>
+						        <td><button type="button" id="restoreJobPosted" class="btn btn-success" onclick="confirmJobPostedRestore('<%=jobId %>')">Restore &nbsp;<span class="fa fa-refresh"></span></button></td>
 						      </tr>
 						      <%
 								}
@@ -167,6 +224,36 @@
 				</div>
 			</div>
 		</div>	
+					<!--  footer -->
+					<footer class="bg-dark text-center  text-white">
+						<div class="contact-us container p-4" id="contact-us">
+							<h2 class="mt-2 mb-2" >Contact Us</h2>
+							<hr class="my-4">
+							<div class="contact-us-content">
+								<div class="row">
+									<div class="col-lg-6 col-sm-12">
+										<h5 class="text-uppercase">Address</h5>
+										<div class="address-coloumn">
+											<p>
+												Radha TechSpace, Baner,
+												Pune,423604.
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-6 col-sm-12">
+										<h5 class="text-uppercase">Reach Us</h5>
+										<div class="address-coloumn">
+											<p><a href="mailto:someone@example.com" class="text-white">campusrecsystem@gmail.com</a></p>
+											<p><a href="tel:+4733378901" class="text-white">+47 333 78 901</a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="copyright bg-info text-light p-2  text-center ">
+							Copyright &copy; 2023. All rights reserved.
+						</div>
+					</footer>
 	
 	 <!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>	
@@ -221,6 +308,27 @@
 			 });
 	 });
 	 
+	 /*confirm delete function*/
+	        function confirmJobPostedDelete(jobId) {
+	      	  var conf =  confirm("Do you really want to delete the record?");
+	              if (conf) {
+	          	    window.location.href = "DeleteJobServlet?jobId="+jobId;
+	              }
+	              else {
+	          	    /*do nothing*/
+	              }
+	        }
+	 
+	 /*restore jobs*/
+	 function confirmJobPostedRestore(jobId) {
+     	  var conf =  confirm("Do you really want to restore the record?");
+             if (conf) {
+         	    window.location.href = "RestoreJobPosted?jobId="+jobId;
+             }
+             else {
+         	    /*do nothing*/
+             }
+       }
 	</script>
 		
 </body>

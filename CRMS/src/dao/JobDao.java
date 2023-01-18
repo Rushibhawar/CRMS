@@ -19,7 +19,7 @@ public class JobDao {
 		int rs = 0;
 		try{
 			Connection con = ConnectionProvider.getMysqlConnection();
-			PreparedStatement ps = con.prepareStatement("insert into job_table ( job_title,job_company,job_description,coordinator_id,coordinator_name) values(?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into job_table ( job_title,job_company,job_description,coordinator_id,coordinator_name,deleted) values(?,?,?,?,?,0)");
 			ps.setString(1,job.getJobTitle());
 			ps.setString(2,job.getJobCompany());
 			ps.setString(3,job.getJobDescription());
@@ -40,7 +40,7 @@ public class JobDao {
 		int rs = 0;
 		try{
 			Connection con = ConnectionProvider.getMysqlConnection();
-			PreparedStatement ps = con.prepareStatement("insert into  applied_job_table (applied_job_title,applied_job_company,applied_job_student_name,applied_job_student_email,applied_job_student_phone,applied_job_student_about,job_id,student_id) values(?,?,?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into  applied_job_table (applied_job_title,applied_job_company,applied_job_student_name,applied_job_student_email,applied_job_student_phone,applied_job_student_about,job_id,student_id,deleted) values(?,?,?,?,?,?,?,?,0)");
 			ps.setString(1,applyJobForm.getApplied_job_title());
 			ps.setString(2,applyJobForm.getApplied_job_company());
 			ps.setString(3,applyJobForm.getApplied_job_student_name());
@@ -63,7 +63,7 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT * FROM job_table";
+			String query = "SELECT * FROM job_table WHERE deleted = 0";
 			Statement stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			
@@ -80,7 +80,7 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT * FROM applied_job_table";
+			String query = "SELECT * FROM applied_job_table WHERE deleted = 0";
 			Statement stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			
@@ -96,7 +96,27 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT * FROM applied_job_table where student_id=?";
+			String query = "SELECT * FROM applied_job_table WHERE student_id=? AND deleted=0";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1,student_id);
+			rs = ps.executeQuery();
+
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside getjobdetails function dao");
+		}
+		
+		return rs;
+	}
+
+	
+	public ResultSet getAllWithdrawnJobDetailsForStudentId(int student_id) {
+		ResultSet rs = null;
+		try {
+			Connection con = ConnectionProvider.getMysqlConnection();
+			String query = "SELECT * FROM applied_job_table WHERE student_id=? AND deleted=1";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1,student_id);
 			rs = ps.executeQuery();
@@ -115,7 +135,26 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT * FROM job_table WHERE coordinator_id=? AND coordinator_name=?";
+			String query = "SELECT * FROM job_table WHERE coordinator_id=? AND coordinator_name=? AND deleted = 0";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1,coordinatorId);
+			ps.setString(2,coordinatorName);
+			rs = ps.executeQuery();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside getjobdetails function dao");
+		}
+		
+		return rs;
+	}
+	
+	public ResultSet getDeletedJobDetails(int coordinatorId,String coordinatorName) {
+		ResultSet rs = null;
+		try {
+			Connection con = ConnectionProvider.getMysqlConnection();
+			String query = "SELECT * FROM job_table WHERE coordinator_id=? AND coordinator_name=? AND deleted = 1";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1,coordinatorId);
 			ps.setString(2,coordinatorName);
@@ -135,7 +174,7 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT COUNT(job_id) FROM job_table ";
+			String query = "SELECT COUNT(job_id) FROM job_table WHERE deleted = 0";
 			PreparedStatement ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
 			rs.next();
@@ -172,7 +211,7 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT COUNT(applied_job_id) FROM applied_job_table WHERE student_id=? ";
+			String query = "SELECT COUNT(applied_job_id) FROM applied_job_table WHERE student_id=? AND deleted=0";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1, student_id);
 			rs = ps.executeQuery();
@@ -212,7 +251,7 @@ public class JobDao {
 		ResultSet rs = null;
 		try {
 			Connection con = ConnectionProvider.getMysqlConnection();
-			String query = "SELECT COUNT(*) FROM job_table WHERE coordinator_id=? AND coordinator_name=?";
+			String query = "SELECT COUNT(*) FROM job_table WHERE coordinator_id=? AND coordinator_name=? AND deleted = 0";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1,coordinatorId);
 			ps.setString(2,coordinatorName);
@@ -232,7 +271,7 @@ public class JobDao {
 		int rs = 0;
 		
 		try {
-			String query = "DELETE FROM job_table WHERE job_id=?";
+			String query = "UPDATE job_table SET deleted=1 WHERE job_id=?";
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,job_id);
 
@@ -247,11 +286,11 @@ public class JobDao {
 		return rs;
 	}
 	
-	public int deleteAppliedJobDetails(int applied_job_id){
+	public int withdrawAppliedJobDetails(int applied_job_id){
 		int rs = 0;
 		
 		try {
-			String query = "DELETE FROM applied_job_table WHERE applied_job_id=?";
+			String query = "UPDATE applied_job_table SET deleted=1 WHERE applied_job_id=?";
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,applied_job_id);
 
@@ -266,5 +305,40 @@ public class JobDao {
 		return rs;
 	}
 	
+	public int deleteWithdrawnJobDetails(int applied_job_id){
+		int rs = 0;
+		
+		try {
+			String query = "DELETE FROM applied_job_table WHERE  deleted=1 AND applied_job_id=?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1,applied_job_id);
+
+			rs = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside dao delete Job details method");
+		}
+		
+		
+		return rs;
+	}
+	
+	public int restoreJobDetails(int job_id){
+		int rs = 0;
+		
+		try {
+			String query = "UPDATE job_table SET deleted=0 WHERE job_id=?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1,job_id);
+
+			rs = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside dao delete student details method deleteStudentDetails");
+		}
+		return rs;
+	}
 	
 }

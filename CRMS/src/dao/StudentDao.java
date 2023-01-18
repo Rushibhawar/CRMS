@@ -19,13 +19,30 @@ public class StudentDao {
 		ResultSet rs = null;
 		try {
 			Statement stmt = con.createStatement();
-			String query = "SELECT * FROM student_table";
+			String query = "SELECT * FROM student_table WHERE deleted=0";
 			rs = stmt.executeQuery(query);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("inside getcountrydetails function dao");
+			System.out.println("inside getStudentDetails function dao");
+		}
+		
+		
+		return rs;
+	}
+	
+	public ResultSet getDeletedStudentDetails() {
+		ResultSet rs = null;
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM student_table WHERE deleted=1";
+			rs = stmt.executeQuery(query);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside getStudentDetails function dao");
 		}
 		
 		
@@ -36,7 +53,7 @@ public class StudentDao {
 		int rs = 0;
 		try{
 			Connection con = ConnectionProvider.getMysqlConnection();
-			PreparedStatement ps = con.prepareStatement("insert into student_table (student_name,student_email,student_password,student_college,student_course,student_contact,student_address) values(?,?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into student_table (student_name,student_email,student_password,student_college,student_course,student_contact,student_address,deleted) values(?,?,?,?,?,?,?,0)");
 			ps.setString(1,student.getStudentName());
 			ps.setString(2,student.getStudentEmail());
 			ps.setString(3,student.getStudentPassword());
@@ -48,7 +65,7 @@ public class StudentDao {
 			rs=ps.executeUpdate(); 
 
 		}catch(Exception e){
-			System.out.println(e+"inside insert servlet");
+			System.out.println(e+"inside insert insertStudent servlet");
 			e.printStackTrace();
 			
 		}
@@ -60,13 +77,13 @@ public class StudentDao {
 		int count = 0;
 		try{
 			Connection con = ConnectionProvider.getMysqlConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT COUNT(student_name) FROM student_table WHERE student_email = ?  ");
+			PreparedStatement ps = con.prepareStatement("SELECT COUNT(student_name) FROM student_table WHERE student_email = ? AND deleted=0");
 			ps.setString(1,student.getStudentEmail());
 			rs=ps.executeQuery(); 
 			rs.next();
 			count = rs.getInt(1);
 		}catch(Exception e){
-			System.out.println(e+"inside insert servlet");
+			System.out.println(e+"inside insert servlet fetchLoginStudent");
 			e.printStackTrace();
 			
 		}
@@ -77,7 +94,7 @@ public class StudentDao {
 		Student student = null;
 		
 		try {
-			String query = "SELECT * FROM student_table WHERE student_email=? AND student_password=?";
+			String query = "SELECT * FROM student_table WHERE student_email=? AND student_password=? AND deleted=0";
 			
 			//prepare statement
 			PreparedStatement pstmt = con.prepareStatement(query);
@@ -105,7 +122,7 @@ public class StudentDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("User not found");
+			System.out.println("User not found getStudentrByEmailAndPassword");
 			e.printStackTrace();
 		}
 		
@@ -117,7 +134,7 @@ public class StudentDao {
 		int rs = 0;
 		
 		try {
-			String query = "DELETE FROM student_table WHERE student_id=?";
+			String query = "UPDATE student_table SET deleted=1 WHERE student_id=?";
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,student_id);
 
@@ -125,12 +142,26 @@ public class StudentDao {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("inside dao delete student details method");
+			System.out.println("inside dao delete student details method deleteStudentDetails");
 		}
-		
-		
 		return rs;
 	}
 	
+	public int restoreStudentDetails(int student_id){
+		int rs = 0;
+		
+		try {
+			String query = "UPDATE student_table SET deleted=0 WHERE student_id=?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1,student_id);
+
+			rs = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("inside dao delete student details method deleteStudentDetails");
+		}
+		return rs;
+	}
 	
 }

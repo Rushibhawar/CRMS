@@ -48,7 +48,7 @@ public class ApplyJobForm extends HttpServlet {
 		
 		// TODO Auto-generated method stub
 				PrintWriter out = response.getWriter();
-				
+				response.setContentType("text/html");
 				String studentEmail = request.getParameter("studentEmail");
 				String studentName = request.getParameter("studentName");
 				String studentCourse = request.getParameter("studentCourse");
@@ -69,11 +69,13 @@ public class ApplyJobForm extends HttpServlet {
 					if(rs > 0)
 					{
 						System.out.println("stored successfully."+rs);
-						response.sendRedirect("adminLogin.jsp");
+						response.getWriter().write("1");
+						//response.sendRedirect("adminLogin.jsp");
 					}else
 					{
 						System.out.println("Failed to store.");
-						response.sendRedirect("adminRegisterForm.jsp");
+						response.getWriter().write("0");
+					//	response.sendRedirect("adminRegisterForm.jsp");
 					}
 
 				}catch(Exception e){

@@ -13,25 +13,31 @@
 	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="CSS/studentlogin.css">
+<link rel="stylesheet" href="CSS/logInStyle.css">
 
 </head>
 <body>
 
 	<%@include file="navbar.jsp" %>
+	
 	<%
 		int jobId = Integer.parseInt(request.getParameter("jobId"));
 		String jobCompany = request.getParameter("jobCompany");
 		String jobTitle = request.getParameter("jobTitle");
 		int studentId = Integer.parseInt(request.getParameter("studentId"));
 		String studentName = request.getParameter("studentName");
+		String studentPhone = request.getParameter("studentPhone");
+		String studentEmail = request.getParameter("studentEmail");
+		String studentCourse = request.getParameter("studentCourse");
 	%>
 	<div class="register-card container-fluid p-5 mt-5">
 
 		 <form id="myForm" name="myForm"  method="post">
-			<h1>
-				Job Application For <span class="text-warning"><%=jobCompany %></span>
-			</h1>
+			<header>
+				<h1>
+					Job Application For <span class="text-warning"><%=jobCompany %></span>
+				</h1>
+			</header>
 <!-- 			<div class="alert alert-success" role="alert"
 				id="successfully-registered">
 				<strong>Success! </strong> Successfully registered.
@@ -50,7 +56,7 @@
 					  </div>
 				<div class="form-group">
 					<label for="inputEmail">Enter Email</label> <input type="email"
-						class="form-control" id="studentEmail" name="studentEmail"
+						class="form-control" id="studentEmail" name="studentEmail" value="<%=studentEmail %>"
 						placeholder="abc@gmail.com" required>
 				</div>
 			<div class="mt-4 mb-4  form-group">
@@ -61,7 +67,7 @@
 				<label for="inputCourse">Course</label> 
 				<select
 					class="form-control " id="studentCourse" name="studentCourse" required>
-					<option selected="" value="DEFAULT">Please select Course</option>
+					<option selected="" value="<%=studentCourse%>"><%=studentCourse%></option>
 					<option value="BCA">BCA</option>
 					<option value="BSc">BSc</option>
 					<option value="MCA">MCA</option>
@@ -82,7 +88,7 @@
 			</div>
 			<div class="mt-4 mb-4 form-group">
 			<label for="inputPhone">Phone</label>
-	      		<input type="tel" class="form-control" id="studentPhone" name="studentPhone" placeholder="xxx-xxx-xxxx" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="12">
+	      		<input type="tel" class="form-control" id="studentPhone" name="studentPhone" value="<%=studentPhone %>" placeholder="xxx-xxx-xxxx" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="12">
 	      		<small>Format : 123-456-7891</small>
 
 			</div>
@@ -95,12 +101,38 @@
 			<button type="submit" class="btn btn-success ">
 				Apply <span class="fa fa-send-o"></span>
 			</button>
-			<a href="studentDashBoard.jsp">
-				<button type="button" class="btn btn-primary ">Back</button>
-			</a>
 		</form>
 	</div>
-
+<!--  footer -->
+					<footer class="bg-dark text-center mt-5 text-white">
+						<div class="contact-us container p-4" id="contact-us">
+							<h2 class="mt-2 mb-2" >Contact Us</h2>
+							<hr class="my-4">
+							<div class="contact-us-content">
+								<div class="row">
+									<div class="col-lg-6 col-sm-12">
+										<h5 class="text-uppercase">Address</h5>
+										<div class="address-coloumn">
+											<p>
+												Radha TechSpace, Baner,
+												Pune,423604.
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-6 col-sm-12">
+										<h5 class="text-uppercase">Reach Us</h5>
+										<div class="address-coloumn">
+											<p><a href="mailto:someone@example.com" class="text-white">campusrecsystem@gmail.com</a></p>
+											<p><a href="tel:+4733378901" class="text-white">+47 333 78 901</a></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="copyright bg-info text-light p-2  text-center ">
+							Copyright &copy; 2023. All rights reserved.
+						</div>
+					</footer>
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>
@@ -149,8 +181,15 @@
 						"studentId":studentId
 					},
 					success : function(data) {
-						alert("Applied successfully.");
-						window.location.href = "http://localhost:8080/CRMS/studentDashBoard.jsp?studentId="+studentId+"&studentName="+studentName;
+						console.log(data);
+						if(data == "1"){
+							alert("Applied successfully.");
+							window.location.href = "http://localhost:8080/CRMS/studentDashBoard.jsp?studentId="+studentId+"&studentName="+studentName;
+						}
+						else{
+							alert("Some error occured while applying");
+							
+						}
 					},
 					  error: function () {
 					        console.log(arguments);
